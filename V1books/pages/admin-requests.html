@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Requests - V1 Services Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .filter-section {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .request-card {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .request-card:hover {
+      border-color: var(--accent-color);
+      transform: translateX(5px);
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .request-id {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      font-family: 'Courier New', monospace;
+    }
+
+    .request-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .assign-section {
+      background-color: var(--primary-color);
+      border-left: 3px solid var(--accent-color);
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .assign-section h5 {
+      margin: 0 0 12px 0;
+      color: var(--accent-color);
+      font-size: 0.9rem;
+    }
+
+    .assign-grid {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 10px;
+    }
+
+    .assign-grid select {
+      grid-column: 1;
+    }
+
+    .assign-grid .btn {
+      grid-column: 2;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    @media (max-width: 768px) {
+      .filter-section {
+        grid-template-columns: 1fr;
+      }
+
+      .request-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .request-info {
+        grid-template-columns: 1fr;
+      }
+
+      .assign-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .assign-grid .btn {
+        grid-column: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading requests...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0; gap: 8px;">
+          <img src="../images/logo.png" alt="V1 Services Logo" class="logo-img-small" style="height: 35px;">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li><a href="admin-dashboard.html">Dashboard</a></li>
+        <li class="active"><a href="admin-requests.html">All Requests</a></li>
+      </ul>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">A</div>
+          <small style="color: var(--text-secondary);">Admin</small>
+        </div>
+        <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div style="margin: 40px 0;">
+      <h1>All Requests</h1>
+      <p style="color: var(--text-secondary); margin-top: 8px;">Manage, assign, and monitor all system requests</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-section">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="filterStatus">Filter by Status</label>
+        <select id="filterStatus">
+          <option value="">All Statuses</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Assigned">Assigned</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="filterService">Filter by Service</label>
+        <select id="filterService">
+          <option value="">All Services</option>
+          <option value="GST">GST Returns</option>
+          <option value="Income Tax">Income Tax</option>
+          <option value="TDS">TDS Compliance</option>
+          <option value="Registrations">Registrations</option>
+          <option value="Compliance">Compliance Audit</option>
+          <option value="Other">Other Services</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="searchTracking">Search by ID</label>
+        <input 
+          type="text" 
+          id="searchTracking" 
+          placeholder="V1-XXXXXX" 
+        >
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="filterAuditor">Assigned Auditor</label>
+        <select id="filterAuditor">
+          <option value="">All Auditors</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="requestsContainer">
+      <div class="empty-state">
+        <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+        <h3>No requests found</h3>
+        <p style="color: var(--text-secondary); margin-top: 10px;">
+          Requests will appear here once submitted by clients
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: 60px;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services Admin</h4>
+        <p>System administration and request management.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    requireAuth();
+
+    const currentUser = Session.getCurrentUser();
+
+    // Verify user is admin
+    if (currentUser.role !== 'admin') {
+      alert('Access denied. Admin only.');
+      Session.logout();
+    }
+
+    document.getElementById('userInitial').textContent = 'A';
+
+    let allRequests = [];
+    let allUsers = [];
+
+    /**
+     * Load all requests and users
+     */
+    async function loadData() {
+      showLoading(true);
+      try {
+        allRequests = await github.getRequests();
+        allUsers = await github.getUsers();
+
+        // Populate auditor filter
+        const auditors = allUsers.filter(u => u.role === 'auditor');
+        const auditorSelect = document.getElementById('filterAuditor');
+        
+        auditors.forEach(auditor => {
+          const option = document.createElement('option');
+          option.value = auditor.email;
+          option.textContent = auditor.email;
+          auditorSelect.appendChild(option);
+        });
+
+        displayRequests(allRequests);
+        showLoading(false);
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to load data', 'danger');
+        console.error('Error:', error);
+      }
+    }
+
+    /**
+     * Display requests
+     */
+    function displayRequests(requests) {
+      const container = document.getElementById('requestsContainer');
+
+      if (requests.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+            <h3>No requests found</h3>
+            <p style="color: var(--text-secondary); margin-top: 10px;">
+              Adjust your filters or check back later
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = requests.map((req, index) => `
+        <div class="request-card">
+          <div class="request-header">
+            <div class="request-id">${req.trackingId}</div>
+            <span class="status-badge status-${req.status.toLowerCase().replace(' ', '-')}">${req.status}</span>
+          </div>
+
+          <div class="request-info">
+            <div class="info-item">
+              <div class="info-label">Client</div>
+              <div class="info-value">${req.clientEmail}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Service</div>
+              <div class="info-value">${req.service}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Period</div>
+              <div class="info-value">${req.period}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Current Auditor</div>
+              <div class="info-value" style="color: ${req.assignedAuditor ? 'var(--success)' : 'var(--warning)'};">
+                ${req.assignedAuditor || '⚠️ Unassigned'}
+              </div>
+            </div>
+          </div>
+
+          <div style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.6;">
+            <strong>Description:</strong> ${req.description}
+          </div>
+
+          <div class="assign-section">
+            <h5>🔄 Assign or Reassign Auditor</h5>
+            <div class="assign-grid">
+              <select id="auditor-select-${index}">
+                <option value="">-- Select Auditor --</option>
+                ${allUsers.filter(u => u.role === 'auditor').map(u => `
+                  <option value="${u.email}" ${req.assignedAuditor === u.email ? 'selected' : ''}>
+                    ${u.email}
+                  </option>
+                `).join('')}
+              </select>
+              <button class="btn btn-primary btn-small" onclick="assignAuditor('${req.trackingId}', ${index})">
+                Assign
+              </button>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <a href="#" onclick="viewDetails('${req.trackingId}'); return false;" class="btn btn-secondary btn-small">
+              View Details
+            </a>
+            <a href="#" onclick="editRequest('${req.trackingId}'); return false;" class="btn btn-secondary btn-small">
+              Edit
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /**
+     * Assign auditor to request
+     */
+    async function assignAuditor(trackingId, index) {
+      const auditorEmail = document.getElementById(`auditor-select-${index}`).value;
+
+      if (!auditorEmail) {
+        showNotification('Please select an auditor', 'danger');
+        return;
+      }
+
+      try {
+        showLoading(true);
+
+        const success = await github.assignAuditor(trackingId, auditorEmail);
+
+        if (success) {
+          showLoading(false);
+          showNotification(`Auditor assigned: ${auditorEmail}`, 'success');
+          await loadData();
+        } else {
+          showLoading(false);
+          showNotification('Failed to assign auditor', 'danger');
+        }
+      } catch (error) {
+        showLoading(false);
+        showNotification(error.message || 'Failed to assign auditor', 'danger');
+        console.error('Error:', error);
+      }
+    }
+
+    /**
+     * View request details
+     */
+    function viewDetails(trackingId) {
+      const request = allRequests.find(r => r.trackingId === trackingId);
+      if (request) {
+        alert(`
+Tracking ID: ${request.trackingId}
+Client: ${request.clientEmail}
+Service: ${request.service}
+Period: ${request.period}
+Status: ${request.status}
+Auditor: ${request.assignedAuditor || 'Unassigned'}
+Created: ${formatDate(request.createdAt)}
+
+Description:
+${request.description}
+        `);
+      }
+    }
+
+    /**
+     * Edit request (placeholder)
+     */
+    function editRequest(trackingId) {
+      showNotification('Edit feature coming soon', 'info');
+    }
+
+    /**
+     * Filter and search
+     */
+    function applyFilters() {
+      const status = document.getElementById('filterStatus').value;
+      const service = document.getElementById('filterService').value;
+      const search = document.getElementById('searchTracking').value.toUpperCase();
+      const auditor = document.getElementById('filterAuditor').value;
+
+      let filtered = allRequests;
+
+      if (status) {
+        filtered = filtered.filter(r => r.status === status);
+      }
+
+      if (service) {
+        filtered = filtered.filter(r => r.service === service);
+      }
+
+      if (search) {
+        filtered = filtered.filter(r => r.trackingId.includes(search));
+      }
+
+      if (auditor === 'unassigned') {
+        filtered = filtered.filter(r => !r.assignedAuditor);
+      } else if (auditor) {
+        filtered = filtered.filter(r => r.assignedAuditor === auditor);
+      }
+
+      displayRequests(filtered);
+    }
+
+    // Event listeners
+    document.getElementById('filterStatus').addEventListener('change', applyFilters);
+    document.getElementById('filterService').addEventListener('change', applyFilters);
+    document.getElementById('searchTracking').addEventListener('input', applyFilters);
+    document.getElementById('filterAuditor').addEventListener('change', applyFilters);
+
+    /**
+     * Logout handler
+     */
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        Session.logout();
+      }
+    }
+
+    // Load data on page load
+    loadData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Send OTP - V1Books</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+  <style>
+    body{font-family:Arial; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; height:100vh}
+    .card{background:#222; padding:20px; border-radius:8px; width:420px}
+    input,button{width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#1b1b1b; color:#fff}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Test Send OTP</h2>
+    <input id="toEmail" placeholder="Recipient email" value="Support@V1books.com">
+    <input id="otp" placeholder="OTP (optional)" value="123456">
+    <button id="sendBtn">Send Test OTP</button>
+    <pre id="out" style="background:#0b0b0b;padding:10px;border-radius:6px;height:120px;overflow:auto"></pre>
+  </div>
+
+  <script>
+    const EMAILJS_SERVICE_ID = 'service_v1books';
+    const EMAILJS_TEMPLATE_ID = 'template_v1books_otp';
+    const EMAILJS_PUBLIC_KEY = '7fXzwDYmS1myGon8w';
+    const GMAIL_USER = 'Support@V1books.com';
+
+    function log(msg){ document.getElementById('out').textContent += msg + '\n'; }
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    document.getElementById('sendBtn').addEventListener('click', async ()=>{
+      const to = document.getElementById('toEmail').value.trim();
+      let otp = document.getElementById('otp').value.trim();
+      if(!otp) otp = Math.floor(100000+Math.random()*900000).toString();
+
+      log('Sending OTP ' + otp + ' to ' + to);
+
+      try{
+        const templateParams = { to_email: to, from_email: GMAIL_USER, otp_code: otp, support_email: GMAIL_USER };
+        const resp = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        log('Sent, response: ' + JSON.stringify(resp));
+      }catch(err){
+        log('Error: ' + JSON.stringify(err));
+      }
+    });
+  </script>
+</body>
+</html>

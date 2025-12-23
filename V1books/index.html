@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V1 Services - Professional Accounts & Finance Solutions</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+      padding: 40px 20px;
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 800px;
+    }
+
+    .logo {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #e10600, #ff4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .hero-description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .cta-buttons .btn {
+      padding: 16px 40px;
+      font-size: 1.1rem;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 100px;
+    }
+
+    .feature-card {
+      background-color: rgba(225, 6, 0, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(225, 6, 0, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--accent-color);
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+    }
+
+    .process-section {
+      margin: 100px 0;
+      padding: 80px 20px;
+      background-color: var(--secondary-color);
+      border-radius: 10px;
+    }
+
+    .process-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .process-title h2 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .timeline-step {
+      position: relative;
+      padding: 30px 24px;
+      background-color: var(--primary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-step:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 8px 20px rgba(225, 6, 0, 0.15);
+    }
+
+    .timeline-step::before {
+      content: attr(data-number);
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45px;
+      height: 45px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 12px rgba(225, 6, 0, 0.4);
+    }
+
+    .timeline-step h4 {
+      margin: 20px 0 12px;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+
+    .timeline-step p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .support-section {
+      background-color: var(--secondary-color);
+      padding: 60px 20px;
+      margin: 100px 0 0;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .support-section h2 {
+      margin-bottom: 40px;
+    }
+
+    .support-channels {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .support-card {
+      flex: 1;
+      min-width: 250px;
+      padding: 30px;
+    }
+
+    .support-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--accent-color);
+    }
+
+    .support-card a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .support-card a:hover {
+      background-color: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 70vh;
+      }
+
+      .logo {
+        font-size: 2.5rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .cta-buttons .btn {
+        width: 100%;
+      }
+
+      .support-channels {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0;">
+          <img src="images/logo.png" alt="V1 Services Logo" class="logo-img-small">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li><a href="#services">Services</a></li>
+        <li><a href="company.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="#support">Support</a></li>
+      </ul>
+      <div class="user-menu">
+        <a href="login.html" class="btn btn-secondary btn-small">Login</a>
+        <a href="register.html" class="btn btn-primary btn-small">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="images/logo.png" alt="V1 Services Logo" style="height: 120px; width: auto; margin-bottom: 30px; filter: drop-shadow(0 4px 8px rgba(225, 6, 0, 0.3));">
+      <h1>Professional Accounts & Finance Services</h1>
+      <p class="hero-subtitle">A product of V1Books</p>
+      <p class="hero-description">
+        Streamlined financial compliance for your business. Connect with expert auditors,
+        submit tax returns, and track everything in one secure platform.
+      </p>
+      <div class="cta-buttons">
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+        <a href="login.html" class="btn btn-secondary">Login</a>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Easy Submissions</h3>
+          <p>Submit GST, Tax returns and compliance documents in minutes.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>Expert Auditors</h3>
+          <p>Work with qualified professionals assigned to your account.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Track Progress</h3>
+          <p>Real-time tracking of your requests with unique tracking IDs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure & Reliable</h3>
+          <p>Bank-level security for all your financial documents.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="container process-section animate">
+    <div class="process-title">
+      <h2 class="section-heading">How It Works</h2>
+      <p style="margin-top: 10px; color: var(--text-secondary);">Simple 4-step workflow</p>
+    </div>
+    <div class="process-timeline">
+      <div class="timeline-step" data-number="1">
+        <h4>Register</h4>
+        <p>Create your account as a Client or Auditor</p>
+      </div>
+      <div class="timeline-step" data-number="2">
+        <h4>Submit Request</h4>
+        <p>Submit your financial compliance documents</p>
+      </div>
+      <div class="timeline-step" data-number="3">
+        <h4>Get Assigned</h4>
+        <p>Expert auditor is assigned to your request</p>
+      </div>
+      <div class="timeline-step" data-number="4">
+        <h4>Track & Review</h4>
+        <p>Follow progress and review completed work</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="container animate" style="margin: 100px 0 60px;">
+    <h2 class="section-heading">All Accounts &amp; Finance Activity</h2>
+    <div class="row row-3 cards-container">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">GST Returns</h3>
+          <p class="card-subtitle">Monthly & Annual GST compliance</p>
+        </div>
+        <p>Ensure timely GST return filing with expert review and submission support.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Income Tax</h3>
+          <p class="card-subtitle">Personal & Corporate ITR Filing</p>
+        </div>
+        <p>Expert guidance for income tax returns and tax planning strategies.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">TDS Compliance</h3>
+          <p class="card-subtitle">Tax Deducted at Source</p>
+        </div>
+        <p>Accurate TDS calculations, returns, and quarterly compliance management.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Business Registrations</h3>
+          <p class="card-subtitle">Business setup and registration</p>
+        </div>
+        <p>Complete business registration including GST, PAN, and entity setup.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Compliance Audit</h3>
+          <p class="card-subtitle">Full compliance audit & review</p>
+        </div>
+        <p>Comprehensive audit to ensure all regulatory requirements are met.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Ongoing Support</h3>
+          <p class="card-subtitle">Continuous advisory support</p>
+        </div>
+        <p>Dedicated auditor for continuous support on all financial matters.</p>
+      </div>
+    </div>
+    <button class="view-more-btn" onclick="toggleServices(this)">View More</button>
+  </section>
+
+  <!-- Support Section -->
+  <section id="support" class="support-section animate">
+    <h2 class="section-heading">Need Help?</h2>
+    <div class="row row-3">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">💬 WhatsApp</h3>
+          <p class="card-subtitle">Quick support for urgent queries</p>
+        </div>
+        <p>Get instant assistance through WhatsApp for any immediate support needs.</p>
+        <p><a href="https://wa.me/919360522383" target="_blank" class="btn btn-primary">Chat with us</a></p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📧 Email</h3>
+          <p class="card-subtitle">Write to our support team</p>
+        </div>
+        <p>Send detailed inquiries and documentation to our support team for thorough assistance.</p>
+        <p><a href="mailto:support@v1books.com" class="btn btn-primary">support@v1books.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Summaries -->
+  <section class="company-section animate">
+    <h2 class="section-heading">Company Policies &amp; FAQ</h2>
+    <div class="row row-2">
+      <div class="card">
+        <h3>Company</h3>
+        <p>V1 Services is a structured Accounts &amp; Finance service platform operating through V1Books to ensure every client request is tracked and handled by verified professionals.</p>
+        <p><a href="company.html" class="btn btn-secondary">Read More</a></p>
+      </div>
+      <div class="card">
+        <h3>Policies & FAQ</h3>
+        <p>Read our Privacy Policy, Terms of Service, and Frequently Asked Questions.</p>
+        <p>
+          <a href="privacy.html" class="btn btn-secondary">Privacy</a>
+          <a href="terms.html" class="btn btn-secondary">Terms</a>
+          <a href="faq.html" class="btn btn-primary">FAQ</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional Accounts & Finance solutions for every business size.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">GST Returns</a></li>
+          <li><a href="#services">Income Tax</a></li>
+          <li><a href="#services">TDS Compliance</a></li>
+          <li><a href="#services">Business Registration</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="https://wa.me/919360522383" target="_blank">WhatsApp</a></li>
+          <li><a href="mailto:support@v1books.com">Email</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="company.html">About Us</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved. | Secure Financial Compliance Solutions</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/919360522383" target="_blank" class="whatsapp-btn" title="Chat with us on WhatsApp">
+    💬
+  </a>
+
+  <script src="js/utils.js"></script>
+  <script>
+    // Animate sections when they scroll into view
+    (function(){
+      const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+          }
+        });
+      },{threshold:0.15});
+
+      document.querySelectorAll('.animate').forEach(el=>observer.observe(el));
+    })();
+
+    // Toggle View More button
+    function toggleServices(btn) {
+      const container = btn.parentElement.querySelector('.cards-container');
+      container.classList.toggle('expanded');
+      btn.textContent = container.classList.contains('expanded') ? 'View Less' : 'View More';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - V1 Services</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container">
+          <img src="images/logo.png" alt="V1 Services Logo" class="logo-img-small">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="company.html">Company</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+      <div class="user-menu">
+        <a href="login.html" class="btn btn-secondary btn-small">Login</a>
+        <a href="register.html" class="btn btn-primary btn-small">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding: 40px 0; max-width: 1000px;">
+    <h1 class="page-title">Frequently Asked Questions</h1>
+    
+    <div class="faq-item active">
+      <div class="faq-question">What is V1 Services?</div>
+      <div class="faq-answer">V1 Services is a structured Accounts &amp; Finance service platform that connects clients with verified professionals using a clear, trackable process.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">What is V1Books?</div>
+      <div class="faq-answer">V1Books is the digital platform used by V1 Services to manage requests, documents, tracking, and continuity of work.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Can I work with the same auditor every month?</div>
+      <div class="faq-answer">Yes. For recurring services like GST and compliance, we ensure auditor continuity to maintain consistency and data safety.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Is my data secure?</div>
+      <div class="faq-answer">Yes. Your documents and information are shared only with assigned professionals and are stored securely.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">What services do you provide?</div>
+      <div class="faq-answer">We cover all major Accounts &amp; Finance activities including GST, Income Tax, TDS, registrations, compliance, and statutory notices.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">How do I track my request?</div>
+      <div class="faq-answer">Every request generates a Tracking ID, which allows you to track status at any time.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">How can I contact support?</div>
+      <div class="faq-answer">You can reach us via: support@v1books.com or WhatsApp: 9360522383</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content container">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional Accounts & Finance solutions for every business size.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="https://wa.me/919360522383" target="_blank">WhatsApp</a></li>
+          <li><a href="mailto:support@v1books.com">Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion functionality
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', function() {
+        const faqItem = this.parentElement;
+        const isActive = faqItem.classList.contains('active');
+        
+        // Close all other FAQ items
+        document.querySelectorAll('.faq-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        // Toggle current item
+        if (!isActive) {
+          faqItem.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

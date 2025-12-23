@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard - V1 Services</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin: 10px 0;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .welcome-section {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .welcome-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .welcome-header h2 {
+      margin: 0;
+    }
+
+    .recent-section {
+      margin-top: 40px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .welcome-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .welcome-header .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading dashboard...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0; gap: 8px;">
+          <img src="../images/logo.png" alt="V1 Services Logo" class="logo-img-small" style="height: 35px;">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li class="active"><a href="client-dashboard.html">Dashboard</a></li>
+        <li><a href="client-request.html">New Request</a></li>
+        <li><a href="client-track.html">Track Requests</a></li>
+        <li><a href="client-help.html">Help & Support</a></li>
+      </ul>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">C</div>
+          <div>
+            <div style="font-weight: 600;" id="userEmail">client@email.com</div>
+            <small style="color: var(--text-secondary);">Client</small>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="welcome-section">
+      <div class="welcome-header">
+        <div>
+          <h2 id="welcomeMessage">Welcome back!</h2>
+          <p style="margin: 8px 0 0; color: var(--text-secondary);">Manage your financial compliance requests</p>
+        </div>
+        <a href="client-request.html" class="btn btn-primary">+ New Request</a>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">📋</div>
+        <div class="stat-value" id="totalRequests">0</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">⏳</div>
+        <div class="stat-value" id="pendingRequests">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">🔄</div>
+        <div class="stat-value" id="inProgressRequests">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">✅</div>
+        <div class="stat-value" id="completedRequests">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+
+    <div class="recent-section">
+      <h2 style="margin-bottom: 20px;">Recent Requests</h2>
+      <div class="card">
+        <div class="table-container">
+          <table id="recentTable">
+            <thead>
+              <tr>
+                <th>Tracking ID</th>
+                <th>Service</th>
+                <th>Period</th>
+                <th>Status</th>
+                <th>Auditor</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                  Loading requests...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: 60px;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional Accounts & Finance solutions.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="https://wa.me/919360522383" target="_blank">WhatsApp: 9360522383</a></li>
+          <li><a href="mailto:support@v1books.com">Email: support@v1books.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="client-request.html">Submit Request</a></li>
+          <li><a href="client-track.html">Track Status</a></li>
+          <li><a href="client-help.html">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/919360522383" target="_blank" class="whatsapp-btn" title="Chat with us on WhatsApp">
+    💬
+  </a>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    requireAuth();
+
+    const currentUser = Session.getCurrentUser();
+
+    // Set user info
+    document.getElementById('userEmail').textContent = currentUser.email;
+    document.getElementById('userInitial').textContent = currentUser.email.charAt(0).toUpperCase();
+    document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.email.split('@')[0]}!`;
+
+    /**
+     * Load client requests
+     */
+    async function loadClientRequests() {
+      showLoading(true);
+      try {
+        const requests = await github.getClientRequests(currentUser.email);
+        
+        // Calculate stats
+        const stats = {
+          total: requests.length,
+          submitted: requests.filter(r => r.status === 'Submitted').length,
+          assigned: requests.filter(r => r.status === 'Assigned').length,
+          inProgress: requests.filter(r => r.status === 'In Progress').length,
+          completed: requests.filter(r => r.status === 'Completed').length
+        };
+
+        // Update stat cards
+        document.getElementById('totalRequests').textContent = stats.total;
+        document.getElementById('pendingRequests').textContent = stats.submitted + stats.assigned;
+        document.getElementById('inProgressRequests').textContent = stats.inProgress;
+        document.getElementById('completedRequests').textContent = stats.completed;
+
+        // Load recent requests (latest 5)
+        const recentRequests = requests.slice(-5).reverse();
+        const tbody = document.querySelector('#recentTable tbody');
+        
+        if (recentRequests.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                No requests yet. <a href="client-request.html" style="color: var(--accent-color); font-weight: 600;">Submit your first request</a>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = recentRequests.map(req => `
+            <tr>
+              <td style="font-weight: 600; color: var(--accent-color);">${req.trackingId}</td>
+              <td>${req.service}</td>
+              <td>${req.period}</td>
+              <td><span class="status-badge status-${req.status.toLowerCase().replace(' ', '-')}">${req.status}</span></td>
+              <td>${req.assignedAuditor || '-'}</td>
+              <td>${formatDate(req.createdAt)}</td>
+              <td><a href="client-track.html?id=${req.trackingId}" style="color: var(--accent-color);">View</a></td>
+            </tr>
+          `).join('');
+        }
+
+        showLoading(false);
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to load requests', 'danger');
+        console.error('Error loading requests:', error);
+      }
+    }
+
+    /**
+     * Logout handler
+     */
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        Session.logout();
+      }
+    }
+
+    // Load data on page load
+    loadClientRequests();
+  </script>
+</body>
+</html>

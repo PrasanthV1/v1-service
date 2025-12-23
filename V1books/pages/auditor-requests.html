@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Requests - V1 Services</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .request-detail {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .request-id {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      font-family: 'Courier New', monospace;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .info-item {
+      background-color: var(--primary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 15px;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .info-value {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .update-section {
+      background-color: var(--primary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 25px;
+      margin-top: 30px;
+    }
+
+    .status-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .status-btn {
+      padding: 12px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      background-color: var(--secondary-color);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .status-btn:hover {
+      border-color: var(--accent-color);
+      background-color: rgba(225, 6, 0, 0.1);
+    }
+
+    .status-btn.active {
+      border-color: var(--accent-color);
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    @media (max-width: 768px) {
+      .request-header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-options {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading requests...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0; gap: 8px;">
+          <img src="../images/logo.png" alt="V1 Services Logo" class="logo-img-small" style="height: 35px;">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li><a href="auditor-dashboard.html">Dashboard</a></li>
+        <li class="active"><a href="auditor-requests.html">My Requests</a></li>
+      </ul>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">A</div>
+          <small style="color: var(--text-secondary);">Auditor</small>
+        </div>
+        <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div style="margin: 40px 0;">
+      <h1>My Assigned Requests</h1>
+      <p style="color: var(--text-secondary); margin-top: 8px;">Review and process client submissions</p>
+    </div>
+
+    <div id="requestsContainer">
+      <div class="empty-state">
+        <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+        <h3>No requests assigned</h3>
+        <p style="color: var(--text-secondary); margin-top: 10px;">
+          You don't have any requests assigned yet. Check back soon!
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: 60px;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional Accounts & Finance solutions.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    requireAuth();
+
+    const currentUser = Session.getCurrentUser();
+
+    // Verify user is auditor
+    if (currentUser.role !== 'auditor') {
+      alert('Access denied. Auditors only.');
+      Session.logout();
+    }
+
+    document.getElementById('userInitial').textContent = currentUser.email.charAt(0).toUpperCase();
+
+    let allRequests = [];
+
+    /**
+     * Load all auditor's assigned requests
+     */
+    async function loadRequests() {
+      showLoading(true);
+      try {
+        allRequests = await github.getAuditorRequests(currentUser.email);
+        displayRequests(allRequests);
+        showLoading(false);
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to load requests', 'danger');
+        console.error('Error:', error);
+      }
+    }
+
+    /**
+     * Display requests
+     */
+    function displayRequests(requests) {
+      const container = document.getElementById('requestsContainer');
+
+      if (requests.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+            <h3>No requests assigned</h3>
+            <p style="color: var(--text-secondary); margin-top: 10px;">
+              You don't have any requests assigned yet. Check back soon!
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = requests.map((req, index) => `
+        <div class="request-detail">
+          <div class="request-header">
+            <div class="request-id">${req.trackingId}</div>
+            <span class="status-badge status-${req.status.toLowerCase().replace(' ', '-')}">${req.status}</span>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Client Email</div>
+              <div class="info-value">${req.clientEmail}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Service</div>
+              <div class="info-value">${req.service}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Period</div>
+              <div class="info-value">${req.period}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Submitted</div>
+              <div class="info-value">${formatDate(req.createdAt)}</div>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="margin-bottom: 12px; color: var(--text-primary);">Request Details</h4>
+            <p style="color: var(--text-secondary); line-height: 1.8; background-color: var(--primary-color); padding: 15px; border-radius: 6px;">
+              ${req.description}
+            </p>
+          </div>
+
+          <div class="update-section">
+            <h4 style="margin-bottom: 20px; color: var(--text-primary);">Update Request Status</h4>
+            <div class="status-options">
+              <button class="status-btn ${req.status === 'Assigned' ? 'active' : ''}" data-status="Assigned" data-id="${index}">
+                Assigned
+              </button>
+              <button class="status-btn ${req.status === 'In Progress' ? 'active' : ''}" data-status="In Progress" data-id="${index}">
+                In Progress
+              </button>
+              <button class="status-btn ${req.status === 'Completed' ? 'active' : ''}" data-status="Completed" data-id="${index}">
+                Completed
+              </button>
+              <button class="status-btn ${req.status === 'Rejected' ? 'active' : ''}" data-status="Rejected" data-id="${index}">
+                Rejected
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label for="notes-${index}">Update Notes (Optional)</label>
+              <textarea 
+                id="notes-${index}" 
+                placeholder="Add any notes about this request (status updates, next steps, etc.)"
+              ></textarea>
+            </div>
+
+            <div class="action-buttons">
+              <button type="button" class="btn btn-secondary" onclick="resetForm(${index})">Reset</button>
+              <button type="button" class="btn btn-primary" onclick="updateRequest('${req.trackingId}', ${index})">
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          ${req.lastNotes ? `
+            <div style="margin-top: 20px; padding: 15px; background-color: var(--primary-color); border-left: 3px solid var(--accent-color); border-radius: 4px;">
+              <strong style="color: var(--accent-color);">Last Update:</strong>
+              <p style="margin-top: 8px; color: var(--text-secondary);">${req.lastNotes}</p>
+              <small style="color: var(--text-secondary);">Updated: ${formatDate(req.lastUpdated)}</small>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+
+      // Add event listeners for status buttons
+      document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          document.querySelectorAll(`.status-btn[data-id="${id}"]`).forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    }
+
+    /**
+     * Update request
+     */
+    async function updateRequest(trackingId, index) {
+      const selectedStatus = document.querySelector(`.status-btn.active[data-id="${index}"]`).getAttribute('data-status');
+      const notes = document.getElementById(`notes-${index}`).value.trim();
+
+      if (!selectedStatus) {
+        showNotification('Please select a status', 'danger');
+        return;
+      }
+
+      try {
+        showLoading(true);
+
+        const success = await github.updateRequestStatus(trackingId, selectedStatus, notes);
+
+        if (success) {
+          showLoading(false);
+          showNotification(`Request updated to ${selectedStatus}`, 'success');
+          
+          // Reload requests
+          await loadRequests();
+        } else {
+          showLoading(false);
+          showNotification('Failed to update request', 'danger');
+        }
+      } catch (error) {
+        showLoading(false);
+        showNotification(error.message || 'Failed to update request', 'danger');
+        console.error('Error:', error);
+      }
+    }
+
+    /**
+     * Reset form
+     */
+    function resetForm(index) {
+      document.querySelector(`.status-btn.active[data-id="${index}"]`).classList.remove('active');
+      document.getElementById(`notes-${index}`).value = '';
+    }
+
+    /**
+     * Logout handler
+     */
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        Session.logout();
+      }
+    }
+
+    // Load requests on page load
+    loadRequests();
+  </script>
+</body>
+</html>

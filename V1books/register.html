@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - V1 Services</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 450px;
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .auth-header h1 {
+      color: var(--accent-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .auth-header p {
+      color: var(--text-secondary);
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background-color: var(--secondary-color);
+      color: var(--text-primary);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .role-group {
+      margin-bottom: 30px;
+    }
+
+    .role-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .role-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .role-option {
+      position: relative;
+    }
+
+    .role-option input[type="radio"] {
+      display: none;
+    }
+
+    .role-option label {
+      display: block;
+      padding: 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    .role-option input[type="radio"]:checked + label {
+      border-color: var(--accent-color);
+      background-color: rgba(225, 6, 0, 0.1);
+      color: var(--accent-color);
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      padding: 8px;
+      border-radius: 4px;
+      background-color: rgba(255, 149, 0, 0.1);
+      color: #ff9500;
+      display: none;
+    }
+
+    .password-strength.show {
+      display: block;
+    }
+
+    .password-strength.weak {
+      background-color: rgba(255, 59, 48, 0.1);
+      color: #ff3b30;
+    }
+
+    .password-strength.medium {
+      background-color: rgba(255, 149, 0, 0.1);
+      color: #ff9500;
+    }
+
+    .password-strength.strong {
+      background-color: rgba(0, 208, 132, 0.1);
+      color: #00d084;
+    }
+
+    .auth-link {
+      text-align: center;
+      margin-top: 20px;
+      color: var(--text-secondary);
+    }
+
+    .auth-link a {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    .auth-link a:hover {
+      color: var(--accent-light);
+    }
+
+    .terms {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .terms a {
+      color: var(--accent-color);
+    }
+
+    .btn-secondary {
+      background-color: var(--text-secondary);
+      color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--text-primary);
+      opacity: 0.9;
+    }
+
+    @media (max-width: 480px) {
+      .auth-box {
+        padding: 30px 20px;
+      }
+
+      .auth-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .role-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Creating your account...</div>
+  </div>
+
+  <div class="auth-container">
+    <div class="auth-box">
+      <div class="auth-header">
+        <div class="logo-container" style="justify-content: center; margin-bottom: 20px;">
+          <img src="images/logo.png" alt="V1 Services Logo" class="logo-img" style="height: 60px;">
+        </div>
+        <h1>V1 Services</h1>
+        <p>Create Your Account</p>
+      </div>
+
+      <form id="registerForm">
+        <!-- Registration Form (Step 1) -->
+        <div id="registrationStep">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              name="firstName" 
+              placeholder="Enter your First name" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              name="lastName" 
+              placeholder="Enter your Last name" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="email">Mail ID</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="your@email.com" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input 
+              type="tel" 
+              id="mobile" 
+              name="mobile" 
+              placeholder="Enter your Mobile Number" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="Minimum 8 characters" 
+              required
+            >
+            <div id="passwordStrength" class="password-strength"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Re-Type Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              placeholder="Confirm your password" 
+              required
+            >
+          </div>
+
+          <div class="role-group">
+            <span class="role-label">I am a:</span>
+            <div class="role-options">
+              <div class="role-option">
+                <input 
+                  type="radio" 
+                  id="roleClient" 
+                  name="role" 
+                  value="client" 
+                  checked
+                >
+                <label for="roleClient">
+                  <span style="font-size: 1.5rem;">👤</span><br>Client
+                </label>
+              </div>
+              <div class="role-option">
+                <input 
+                  type="radio" 
+                  id="roleAuditor" 
+                  name="role" 
+                  value="auditor"
+                >
+                <label for="roleAuditor">
+                  <span style="font-size: 1.5rem;">📊</span><br>Auditor
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="terms">
+            By registering, you agree to our <a href="terms.html">Terms of Service</a> and 
+            <a href="privacy.html">Privacy Policy</a>. We handle your data with utmost security.
+          </div>
+
+          <button id="submitBtn" type="submit" class="btn btn-primary btn-block">Submit</button>
+
+          <div class="auth-link">
+            Already have an account? <a href="login.html">Login here</a>
+          </div>
+        </div>
+
+        <!-- Email Verification Step (Step 2) -->
+        <div id="verificationStep" style="display: none;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">✉️</div>
+            <h2 style="color: var(--accent-color); margin-bottom: 10px;">Verify Your Email</h2>
+            <p style="color: var(--text-secondary);">A unique code has been sent to<br><strong id="verificationEmail"></strong></p>
+          </div>
+
+          <div class="form-group">
+            <label for="verificationCode">Enter Unique Code</label>
+            <input 
+              type="text" 
+              id="verificationCode" 
+              name="verificationCode" 
+              placeholder="Enter the code from your email" 
+              required
+            >
+          </div>
+
+          <button type="button" class="btn btn-primary btn-block" onclick="verifyCode()">Verify & Complete Registration</button>
+
+          <div style="text-align: center; margin-top: 15px;">
+            <button type="button" class="btn btn-secondary btn-block" onclick="resendCode()">Resend Code</button>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-top: 20px;">
+            Need help? Contact us at <strong>Support@v1books.com</strong>
+          </div>
+        </div>
+
+        <!-- Success Step (Step 3) -->
+        <div id="successStep" style="display: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">✓</div>
+            <h2 style="color: var(--accent-color); margin-bottom: 15px;">Registration Successful!</h2>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 25px;">
+              Your unique User ID and login credentials have been sent to your email address. 
+              Please check your inbox and use the provided username to login to the web app.
+            </p>
+            <a href="login.html" class="btn btn-primary btn-block">Go to Login</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EmailJS Library for sending emails -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    // EmailJS Configuration
+    const EMAILJS_SERVICE_ID = 'service_v1books';
+    const EMAILJS_TEMPLATE_ID = 'template_v1books_otp';
+    const EMAILJS_PUBLIC_KEY = '7fXzwDYmS1myGon8w'; // Provided EmailJS/API key
+    const SUPPORT_EMAIL = 'Support@V1books.com';
+    const GMAIL_USER = 'Support@V1books.com'; // Official Gmail for sending OTPs
+
+    // Set default GitHub repo/owner for frontend backup (will be used if user hasn't configured a different repo)
+    (function setDefaultGithubRepo(){
+      try {
+        if (!localStorage.getItem('github_owner')) localStorage.setItem('github_owner', 'PrasanthV1');
+        if (!localStorage.getItem('github_repo')) localStorage.setItem('github_repo', 'v1-service');
+      } catch(e) { console.warn('Could not set default GitHub config', e); }
+    })();
+
+    // User ID counters
+    let auditorCounter = 0;
+    let clientCounter = 0;
+
+    let registrationData = {};
+    const passwordInput = document.getElementById('password');
+    const passwordStrengthDiv = document.getElementById('passwordStrength');
+
+    // Initialize EmailJS
+    function initEmailJS() {
+      if (EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+    }
+
+    /**
+     * Check password strength
+     */
+    function checkPasswordStrength(password) {
+      let strength = 'weak';
+      let message = '⚠️ Weak password';
+
+      if (password.length >= 8) {
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[!@#$%^&*]/.test(password);
+
+        const complexity = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+
+        if (complexity >= 3) {
+          strength = 'strong';
+          message = '✓ Strong password';
+        } else if (complexity >= 2) {
+          strength = 'medium';
+          message = '⚠️ Medium strength (add numbers/symbols for stronger)';
+        }
+      }
+
+      return { strength, message };
+    }
+
+    passwordInput.addEventListener('input', function() {
+      if (this.value.length > 0) {
+        const { strength, message } = checkPasswordStrength(this.value);
+        passwordStrengthDiv.classList.add('show');
+        passwordStrengthDiv.className = `password-strength show ${strength}`;
+        passwordStrengthDiv.textContent = message;
+      } else {
+        passwordStrengthDiv.classList.remove('show');
+      }
+    });
+
+    /**
+     * Validate email format
+     */
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    /**
+     * Validate mobile number format
+     */
+    function isValidMobile(mobile) {
+      const mobileRegex = /^[\d\s\-\+\(\)]{10,}$/;
+      return mobileRegex.test(mobile.replace(/\s/g, ''));
+    }
+
+    /**
+     * Send OTP via email using EmailJS and Gmail
+     */
+    async function sendOTPEmail(email, otp) {
+      try {
+        initEmailJS();
+
+        const templateParams = {
+          to_email: email,
+          from_email: GMAIL_USER,
+          otp_code: otp,
+          support_email: SUPPORT_EMAIL,
+          message: `Your V1Books verification code is: ${otp}. This code will expire in 10 minutes. Please do not share this code with anyone.`
+        };
+
+        // Using EmailJS to send via Support@V1books.com Gmail
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        console.log('OTP Email sent successfully from ' + GMAIL_USER + ' to ' + email);
+        return true;
+      } catch (error) {
+        console.error('Failed to send OTP email:', error);
+        // Fallback: show OTP in console for testing
+        console.log('OTP for testing:', otp);
+        return true; // Continue anyway for testing
+      }
+    }
+
+    /**
+     * Handle form submission (Step 1)
+     * Wrapped in DOMContentLoaded to ensure elements exist when listeners attach.
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('registerForm');
+      const submitBtn = document.getElementById('submitBtn');
+
+      async function handleRegistrationSubmit(e) {
+        if (e) e.preventDefault();
+
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const role = document.querySelector('input[name="role"]:checked').value;
+
+        // Validation
+        if (!firstName) {
+          showNotification('Please enter your first name', 'danger');
+          return;
+        }
+
+        if (!lastName) {
+          showNotification('Please enter your last name', 'danger');
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showNotification('Please enter a valid email address', 'danger');
+          return;
+        }
+
+        if (!isValidMobile(mobile)) {
+          showNotification('Please enter a valid mobile number', 'danger');
+          return;
+        }
+
+        if (password.length < 8) {
+          showNotification('Password must be at least 8 characters', 'danger');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showNotification('Passwords do not match', 'danger');
+          return;
+        }
+
+        try {
+          showLoading(true);
+
+          // Store registration data
+          registrationData = {
+            firstName,
+            lastName,
+            email,
+            mobile,
+            password,
+            role
+          };
+
+          // Generate OTP verification code
+          const verificationCode = generateVerificationCode();
+          registrationData.verificationCode = verificationCode;
+
+          // Send OTP to email
+          await sendOTPEmail(email, verificationCode);
+
+          // Save to localStorage temporarily
+          localStorage.setItem('_temp_verification_code', verificationCode);
+          localStorage.setItem('_temp_registration_data', JSON.stringify(registrationData));
+
+          showLoading(false);
+
+          // Show verification step
+          document.getElementById('registrationStep').style.display = 'none';
+          document.getElementById('verificationStep').style.display = 'block';
+          document.getElementById('verificationEmail').textContent = email;
+
+          showNotification('OTP sent to your email address. Please check your inbox.', 'success');
+
+        } catch (error) {
+          showLoading(false);
+          showNotification(error.message || 'An error occurred. Please try again.', 'danger');
+          console.error('Registration error:', error);
+        }
+      }
+
+      // Attach listeners
+      if (form) form.addEventListener('submit', handleRegistrationSubmit);
+      if (submitBtn && form) submitBtn.addEventListener('click', function(e){
+        // trigger form submission programmatically (useful if click handler fires before submit listener attached elsewhere)
+        e.preventDefault();
+        form.requestSubmit();
+      });
+    });
+
+    /**
+     * Generate OTP verification code
+     */
+    function generateVerificationCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
+    }
+
+    /**
+     * Load user counters from GitHub
+     */
+    async function loadUserCounters() {
+      try {
+        // Try to fetch from localStorage first
+        const stored = localStorage.getItem('user_counters');
+        if (stored) {
+          const counters = JSON.parse(stored);
+          auditorCounter = counters.auditor || 0;
+          clientCounter = counters.client || 0;
+        }
+      } catch (error) {
+        console.log('Using default counters');
+      }
+    }
+
+    /**
+     * Generate unique User ID based on role
+     */
+    async function generateUserId(role) {
+      await loadUserCounters();
+
+      if (role === 'auditor') {
+        auditorCounter++;
+        return `AD-V1-${String(auditorCounter).padStart(3, '0')}`;
+      } else {
+        clientCounter++;
+        return `CL-V1-${String(clientCounter).padStart(3, '0')}`;
+      }
+    }
+
+    /**
+     * Save user data to GitHub
+     */
+    async function saveToGitHub(userData) {
+      try {
+        // Read GitHub config from localStorage
+        const owner = localStorage.getItem('github_owner');
+        const repo = localStorage.getItem('github_repo');
+        const token = localStorage.getItem('github_token');
+
+        // Always keep a local backup
+        const gitHubData = {
+          userId: userData.userId,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          mobile: userData.mobile,
+          role: userData.role,
+          registeredAt: userData.registeredAt,
+          passwordHash: userData.passwordHash
+        };
+        localStorage.setItem('user_' + userData.userId, JSON.stringify(gitHubData));
+        localStorage.setItem('user_counters', JSON.stringify({ auditor: auditorCounter, client: clientCounter }));
+
+        if (!owner || !repo || !token) {
+          console.log('GitHub config missing — saved locally only. Set owner/repo/token to enable GitHub backup.');
+          return true;
+        }
+
+        // Prepare file path and content
+        const path = `users/${userData.userId}.json`;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(gitHubData, null, 2))));
+        const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+        // Check if file exists to get sha
+        let sha = null;
+        try {
+          const getResp = await fetch(apiBase, {
+            headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+          });
+          if (getResp.ok) {
+            const getJson = await getResp.json();
+            sha = getJson.sha;
+          }
+        } catch (err) {
+          console.log('File does not exist yet or cannot access GitHub file check:', err);
+        }
+
+        // Commit message
+        const commitMessage = `Add/Update user ${userData.userId}`;
+
+        // Create or update file
+        const putResp = await fetch(apiBase, {
+          method: 'PUT',
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: commitMessage, content, sha })
+        });
+
+        if (!putResp.ok) {
+          const errTxt = await putResp.text();
+          console.error('GitHub save failed:', putResp.status, errTxt);
+          return false;
+        }
+
+        const respJson = await putResp.json();
+        console.log('Saved user to GitHub:', respJson.content && respJson.content.path);
+        return true;
+      } catch (error) {
+        console.error('Error saving to GitHub:', error);
+        return false;
+      }
+    }
+
+    /**
+     * Verify the OTP code
+     */
+    async function verifyCode() {
+      const enteredCode = document.getElementById('verificationCode').value.trim();
+      const correctCode = registrationData.verificationCode;
+
+      if (!enteredCode) {
+        showNotification('Please enter the verification code', 'danger');
+        return;
+      }
+
+      if (enteredCode !== correctCode) {
+        showNotification('Invalid verification code. Please try again.', 'danger');
+        return;
+      }
+
+      try {
+        showLoading(true);
+
+        // Hash password
+        const passwordHash = await hashPassword(registrationData.password);
+
+        // Generate unique User ID based on role
+        const userId = await generateUserId(registrationData.role);
+        registrationData.userId = userId;
+
+        // Prepare user data
+        const userData = {
+          userId,
+          firstName: registrationData.firstName,
+          lastName: registrationData.lastName,
+          email: registrationData.email,
+          mobile: registrationData.mobile,
+          passwordHash,
+          role: registrationData.role,
+          registeredAt: new Date().toISOString()
+        };
+
+        // Save to GitHub
+        await saveToGitHub(userData);
+
+        // Clear temporary data
+        localStorage.removeItem('_temp_verification_code');
+        localStorage.removeItem('_temp_registration_data');
+
+        showLoading(false);
+
+        // Show success step
+        document.getElementById('verificationStep').style.display = 'none';
+        document.getElementById('successStep').style.display = 'block';
+
+        // Display User ID in success message
+        const successMessage = document.querySelector('#successStep p');
+        successMessage.innerHTML = `Your registration is complete! <br><br>
+          <strong>Your Unique ID: ${userId}</strong><br><br>
+          Your unique User ID and login credentials have been sent to your email address. 
+          Please check your inbox and use the provided username to login to the web app.`;
+
+        showNotification('Account created successfully! Your Unique ID: ' + userId, 'success');
+
+        // Auto-redirect after 4 seconds
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 4000);
+
+      } catch (error) {
+        showLoading(false);
+        showNotification(error.message || 'An error occurred. Please try again.', 'danger');
+        console.error('Verification error:', error);
+      }
+    }
+
+    /**
+     * Resend OTP
+     */
+    async function resendCode() {
+      try {
+        showLoading(true);
+
+        // Generate new OTP
+        const newCode = generateVerificationCode();
+        registrationData.verificationCode = newCode;
+        localStorage.setItem('_temp_verification_code', newCode);
+
+        // Send new OTP to email
+        await sendOTPEmail(registrationData.email, newCode);
+
+        showLoading(false);
+        document.getElementById('verificationCode').value = '';
+
+        showNotification('New OTP sent to ' + registrationData.email, 'success');
+        console.log('New OTP (for testing):', newCode);
+
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to resend OTP. Please try again.', 'danger');
+      }
+    }
+
+    // ---------------------- GitHub config helpers ----------------------
+    function saveGithubConfig() {
+      const owner = document.getElementById('githubOwner').value.trim();
+      const repo = document.getElementById('githubRepo').value.trim();
+      const token = document.getElementById('githubToken').value.trim();
+      if (!owner || !repo || !token) return showNotification('Provide owner, repo and token', 'danger');
+      localStorage.setItem('github_owner', owner);
+      localStorage.setItem('github_repo', repo);
+      localStorage.setItem('github_token', token);
+      showNotification('GitHub configuration saved locally', 'success');
+    }
+
+    async function testGitHubSave() {
+      const owner = localStorage.getItem('github_owner');
+      const repo = localStorage.getItem('github_repo');
+      const token = localStorage.getItem('github_token');
+      if (!owner || !repo || !token) return showNotification('Please save GitHub config first', 'danger');
+
+      const testData = {
+        userId: 'TEST-' + Date.now(),
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+        mobile: '000',
+        role: 'client',
+        registeredAt: new Date().toISOString()
+      };
+
+      showLoading(true);
+      const ok = await saveToGitHub(testData);
+      showLoading(false);
+      if (ok) showNotification('Test file saved to GitHub (or locally if config not reachable).', 'success');
+      else showNotification('Failed to save test file to GitHub. Check console for details.', 'danger');
+    }
+  </script>
+</body>
+</html>

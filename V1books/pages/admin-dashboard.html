@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - V1 Services</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin: 10px 0;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .welcome-section {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .filter-section {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .filter-section {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading system...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0; gap: 8px;">
+          <img src="../images/logo.png" alt="V1 Services Logo" class="logo-img-small" style="height: 35px;">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li class="active"><a href="admin-dashboard.html">Dashboard</a></li>
+        <li><a href="admin-requests.html">All Requests</a></li>
+      </ul>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">A</div>
+          <div>
+            <div style="font-weight: 600;" id="userEmail">prasanth@v1books.com</div>
+            <small style="color: var(--text-secondary);">Admin</small>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="welcome-section">
+      <h2 id="welcomeMessage">System Overview</h2>
+      <p style="margin: 8px 0 0; color: var(--text-secondary);">Full administrative control and monitoring</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">📋</div>
+        <div class="stat-value" id="totalRequests">0</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">👥</div>
+        <div class="stat-value" id="totalUsers">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">🧾</div>
+        <div class="stat-value" id="clientCount">0</div>
+        <div class="stat-label">Clients</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">👤</div>
+        <div class="stat-value" id="auditorCount">0</div>
+        <div class="stat-label">Auditors</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">✅</div>
+        <div class="stat-value" id="completedCount">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size: 1.8rem;">⏳</div>
+        <div class="stat-value" id="pendingCount">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <h2 style="margin-bottom: 20px;">System Status & Quick Actions</h2>
+      <div class="card" style="background: linear-gradient(135deg, rgba(225, 6, 0, 0.05), rgba(225, 6, 0, 0.02));">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div>
+            <h4 style="color: var(--accent-color); margin-bottom: 10px;">System Status</h4>
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">All systems operational ✅</p>
+            <small style="color: var(--text-secondary);">Last check: Just now</small>
+          </div>
+          <div>
+            <h4 style="color: var(--accent-color); margin-bottom: 10px;">Database</h4>
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">Connected to GitHub ✅</p>
+            <small style="color: var(--text-secondary);">Synced: Real-time</small>
+          </div>
+          <div>
+            <h4 style="color: var(--accent-color); margin-bottom: 10px;">Quick Action</h4>
+            <a href="admin-requests.html" class="btn btn-primary btn-small">Manage Requests</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <h2 style="margin-bottom: 20px;">Recent Activity</h2>
+      <div class="card">
+        <div class="table-container">
+          <table id="activityTable">
+            <thead>
+              <tr>
+                <th>Tracking ID</th>
+                <th>Client</th>
+                <th>Service</th>
+                <th>Status</th>
+                <th>Auditor</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                  Loading activity...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: 60px;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional Accounts & Finance solutions.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Admin Support</h4>
+        <ul>
+          <li><a href="mailto:prasanth@v1books.com">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    requireAuth();
+
+    const currentUser = Session.getCurrentUser();
+
+    // Verify user is admin
+    if (currentUser.role !== 'admin') {
+      alert('Access denied. Admin only.');
+      Session.logout();
+    }
+
+    // Set user info
+    document.getElementById('userEmail').textContent = currentUser.email;
+    document.getElementById('userInitial').textContent = 'A';
+
+    /**
+     * Load dashboard data
+     */
+    async function loadDashboardData() {
+      showLoading(true);
+      try {
+        const requests = await github.getRequests();
+        const users = await github.getUsers();
+
+        // Calculate stats
+        const clients = users.filter(u => u.role === 'client').length;
+        const auditors = users.filter(u => u.role === 'auditor').length;
+        const completed = requests.filter(r => r.status === 'Completed').length;
+        const pending = requests.filter(r => r.status === 'Submitted' || r.status === 'Assigned').length;
+
+        // Update stats
+        document.getElementById('totalRequests').textContent = requests.length;
+        document.getElementById('totalUsers').textContent = users.length;
+        document.getElementById('clientCount').textContent = clients;
+        document.getElementById('auditorCount').textContent = auditors;
+        document.getElementById('completedCount').textContent = completed;
+        document.getElementById('pendingCount').textContent = pending;
+
+        // Load recent activity (last 10)
+        const recent = requests.slice(-10).reverse();
+        const tbody = document.querySelector('#activityTable tbody');
+
+        if (recent.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                No activity yet
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = recent.map(req => `
+            <tr>
+              <td style="font-weight: 600; color: var(--accent-color);">${req.trackingId}</td>
+              <td>${req.clientEmail}</td>
+              <td>${req.service}</td>
+              <td><span class="status-badge status-${req.status.toLowerCase().replace(' ', '-')}">${req.status}</span></td>
+              <td>${req.assignedAuditor || '-'}</td>
+              <td>${formatDate(req.createdAt)}</td>
+            </tr>
+          `).join('');
+        }
+
+        showLoading(false);
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to load dashboard data', 'danger');
+        console.error('Error:', error);
+      }
+    }
+
+    /**
+     * Logout handler
+     */
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        Session.logout();
+      }
+    }
+
+    // Load data on page load
+    loadDashboardData();
+  </script>
+</body>
+</html>

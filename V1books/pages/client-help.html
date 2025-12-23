@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support - V1 Services</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .help-container {
+      max-width: 900px;
+      margin: 40px auto;
+    }
+
+    .faq-section {
+      margin-bottom: 40px;
+    }
+
+    .faq-item {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background-color: rgba(225, 6, 0, 0.05);
+    }
+
+    .faq-question h4 {
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .faq-toggle {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 20px;
+      background-color: var(--primary-color);
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 20px;
+    }
+
+    .support-channels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .support-card {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .support-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .support-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .support-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .support-card p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      min-height: 40px;
+    }
+
+    .support-card a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .support-card a:hover {
+      background-color: var(--accent-light);
+    }
+
+    .contact-form {
+      background-color: var(--secondary-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    @media (max-width: 768px) {
+      .help-container {
+        padding: 0 20px;
+      }
+
+      .support-channels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Sending message...</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="navbar container">
+      <div class="navbar-brand">
+        <div class="logo-container" style="margin-right: 0; gap: 8px;">
+          <img src="../images/logo.png" alt="V1 Services Logo" class="logo-img-small" style="height: 35px;">
+          <span>V1 Services</span>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li><a href="client-dashboard.html">Dashboard</a></li>
+        <li><a href="client-request.html">New Request</a></li>
+        <li><a href="client-track.html">Track Requests</a></li>
+        <li class="active"><a href="client-help.html">Help & Support</a></li>
+      </ul>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">C</div>
+          <small style="color: var(--text-secondary);">Client</small>
+        </div>
+        <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="help-container">
+      <div style="margin-bottom: 40px;">
+        <h1>Help & Support</h1>
+        <p style="color: var(--text-secondary); margin-top: 10px; font-size: 1.1rem;">
+          Get answers to common questions and reach our support team
+        </p>
+      </div>
+
+      <!-- Support Channels -->
+      <div class="support-channels">
+        <div class="support-card">
+          <div class="support-icon">💬</div>
+          <h3>WhatsApp Support</h3>
+          <p>Quick responses for urgent queries. Available 9am-6pm IST</p>
+          <a href="https://wa.me/919360522383" target="_blank">Chat with us</a>
+        </div>
+        <div class="support-card">
+          <div class="support-icon">📧</div>
+          <h3>Email Support</h3>
+          <p>Detailed support for complex issues. Responded within 24 hours</p>
+          <a href="mailto:support@v1books.com">Email us</a>
+        </div>
+        <div class="support-card">
+          <div class="support-icon">👥</div>
+          <h3>Account Manager</h3>
+          <p>Direct contact for account-specific queries and updates</p>
+          <a href="mailto:support@v1books.com">Contact Support</a>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-section">
+        <h2 style="margin-bottom: 30px;">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I submit a new request?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Navigate to "New Request" from your dashboard, select the service type (GST, Income Tax, TDS, etc.), choose the period, and provide detailed information about your request. You'll receive a unique Tracking ID immediately after submission.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>What is a Tracking ID and how do I use it?</h4>
+            <h4 style="font-size: 1rem; margin-left: auto;"></h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>A Tracking ID (format: V1-XXXXXX) is a unique identifier for your request. Use it to monitor the status of your submission. You can search by Tracking ID on the "Track Requests" page to get real-time updates on your request's progress.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How long does it take to process a request?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Processing time depends on the complexity of your request. Typically:
+              <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-secondary);">
+                <li>GST Returns: 2-3 working days</li>
+                <li>Income Tax Returns: 3-5 working days</li>
+                <li>TDS Compliance: 1-2 working days</li>
+                <li>Registrations: 5-7 working days</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I modify my request after submission?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Once submitted, requests cannot be directly modified. However, you can contact our support team via WhatsApp or email with your Tracking ID to request changes. Please note that modifications may affect processing time.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Who is my assigned auditor?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Your assigned auditor is displayed on the request details page. Our admin team assigns qualified auditors based on their expertise and availability. You'll receive a notification when an auditor is assigned to your request. For recurring services like GST, the same auditor will be assigned to maintain continuity.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How secure is my data?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>All your data is stored securely in our GitHub repository with private access. We use industry-standard encryption and follow best practices for data protection. Your password is hashed using SHA-256 encryption and is never stored in plain text.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>What payment methods do you accept?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Currently, we're in beta phase and focus on service quality. For pricing and payment inquiries, please contact support@v1books.com or call us on WhatsApp at 9360522383.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I download completed work?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>Once your request is marked as "Completed", you can download the prepared documents from the request details page. We support multiple file formats for easy compatibility with government portals.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I contact your team?</h4>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>You can reach us through multiple channels:
+              <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-secondary);">
+                <li><strong>WhatsApp:</strong> 9360522383</li>
+                <li><strong>Email:</strong> support@v1books.com</li>
+                <li><strong>Support Email:</strong> support@v1books.com</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <h2 style="margin-bottom: 20px;">Send Us a Message</h2>
+        <form id="helpForm">
+          <div class="form-group">
+            <label for="helpName">Your Name</label>
+            <input type="text" id="helpName" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="helpEmail">Email Address</label>
+            <input type="email" id="helpEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="helpSubject">Subject</label>
+            <input type="text" id="helpSubject" name="subject" placeholder="e.g., Issue with request tracking" required>
+          </div>
+          <div class="form-group">
+            <label for="helpMessage">Message</label>
+            <textarea id="helpMessage" name="message" placeholder="Describe your issue or question in detail" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: 60px;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>V1 Services</h4>
+        <p>Professional financial compliance support.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="client-dashboard.html">Dashboard</a></li>
+          <li><a href="client-request.html">New Request</a></li>
+          <li><a href="client-track.html">Track Status</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 V1Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/919360522383" target="_blank" class="whatsapp-btn" title="Chat with us on WhatsApp">
+    💬
+  </a>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    requireAuth();
+
+    const currentUser = Session.getCurrentUser();
+    document.getElementById('userInitial').textContent = currentUser.email.charAt(0).toUpperCase();
+
+    /**
+     * FAQ Toggle Handler
+     */
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', function() {
+        const faqItem = this.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+
+    /**
+     * Help Form Submit
+     */
+    document.getElementById('helpForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('helpName').value.trim();
+      const email = document.getElementById('helpEmail').value.trim();
+      const subject = document.getElementById('helpSubject').value.trim();
+      const message = document.getElementById('helpMessage').value.trim();
+
+      if (!name || !email || !subject || !message) {
+        showNotification('Please fill in all fields', 'danger');
+        return;
+      }
+
+      try {
+        showLoading(true);
+
+        // Simulate email send (in real app, this would go to backend)
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        showLoading(false);
+        showNotification('Message sent successfully! We will respond within 24 hours.', 'success');
+        
+        // Reset form
+        document.getElementById('helpForm').reset();
+
+        // In production, you would send this to: support@v1books.com
+        console.log('Help message:', { name, email, subject, message, timestamp: new Date().toISOString() });
+      } catch (error) {
+        showLoading(false);
+        showNotification('Failed to send message. Please try again.', 'danger');
+      }
+    });
+
+    /**
+     * Logout handler
+     */
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        Session.logout();
+      }
+    }
+  </script>
+</body>
+</html>
